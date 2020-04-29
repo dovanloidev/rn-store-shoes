@@ -10,7 +10,6 @@ export default class LoadingScreen extends Component {
 	}
 
 	render() {
-		console.log('2342343');
 		return (
 			<View style={styles.container}>
 				<Text> Loading... </Text>

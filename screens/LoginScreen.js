@@ -15,7 +15,6 @@ export default class LoginScreen extends Component {
 		firebase
 			.auth()
 			.signInWithEmailAndPassword(email, password)
-			.then(() => console.log('Login'))
 			.catch((err) => this.setState({ errorMessage: err.message }));
 	};
 
@@ -31,7 +30,7 @@ export default class LoginScreen extends Component {
 						<Text style={styles.inputTitle}>Email Address: </Text>
 						<TextInput
 							style={styles.input}
-							autoCapitalize={false}
+							autoCapitalize={'none'}
 							onChangeText={(email) => this.setState({ email })}
 							value={this.state.email}
 						/>
@@ -40,16 +39,16 @@ export default class LoginScreen extends Component {
 						<Text style={styles.inputTitle}>PassWord: </Text>
 						<TextInput
 							style={styles.input}
-							autoCapitalize={false}
+							autoCapitalize={'none'}
 							secureTextEntry
 							onChangeText={(password) => this.setState({ password })}
 							value={this.state.password}
 						/>
 					</View>
 					<TouchableOpacity style={styles.buttonContainer} onPress={this.onLoginHandler}>
-						<Text style={styles.buttonTitle}>Login</Text>
+						<Text style={styles.buttonTitle}>Sign in</Text>
 					</TouchableOpacity>
-					<TouchableOpacity>
+					<TouchableOpacity onPress={() => this.props.navigation.navigate('Register')}>
 						<Text style={{ fontSize: 16, color: 'gray' }}>
 							New to ShoesApp? <Text style={{ color: '#0000FF' }}>Sign Up</Text>
 						</Text>
