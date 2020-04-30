@@ -3,6 +3,10 @@ import { Text, View, StyleSheet, TextInput, TouchableOpacity, TouchableWithoutFe
 import * as firebase from 'firebase';
 
 export default class RegisterScreen extends Component {
+	static navigationOptions = {
+		headerShown: false,
+	};
+
 	state = {
 		name: '',
 		email: '',
@@ -77,15 +81,16 @@ export default class RegisterScreen extends Component {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
+		justifyContent: 'center',
 		alignItems: 'center',
 		padding: 16,
+		backgroundColor: 'white'
 	},
 	title: {
 		fontSize: 30,
 	},
 	errorContainer: {
 		width: '90%',
-		marginTop: 10,
 		padding: 15,
 	},
 	error: {

@@ -1,8 +1,22 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import {
+	Text,
+	View,
+	StyleSheet,
+	TextInput,
+	TouchableOpacity,
+	TouchableWithoutFeedback,
+	Keyboard,
+	StatusBar,
+	Image,
+} from 'react-native';
 import * as firebase from 'firebase';
 
 export default class LoginScreen extends Component {
+	static navigationOptions = {
+		headerShown: false,
+	};
+
 	state = {
 		email: '',
 		password: '',
@@ -22,6 +36,7 @@ export default class LoginScreen extends Component {
 		return (
 			<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
 				<View style={styles.container}>
+					<StatusBar barStyle="light-content"></StatusBar>
 					<Text style={styles.title}> LoginScreen </Text>
 					<View style={styles.errorContainer}>
 						<Text style={styles.error}> {this.state.errorMessage} </Text>
@@ -62,16 +77,17 @@ export default class LoginScreen extends Component {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
+		justifyContent: "center",
 		alignItems: 'center',
 		padding: 16,
+		backgroundColor: 'white'
 	},
 	title: {
 		fontSize: 30,
 	},
 	errorContainer: {
-    width: '90%',
-    marginTop: 20,
-    padding: 15
+		width: '90%',
+		padding: 15,
 	},
 	error: {
 		fontSize: 18,
