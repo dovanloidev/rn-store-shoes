@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import * as firebase from 'firebase';
+import { Ionicons } from '@expo/vector-icons';
 
 export default class ProfileScreen extends Component {
 	state = {
@@ -21,9 +22,10 @@ export default class ProfileScreen extends Component {
 	render() {
 		return (
 			<View style={styles.container}>
-				<Text> Hello {this.state.email} </Text>
-				<TouchableOpacity onPress={this.onLogoutHandler}>
-					<Text>Log out</Text>
+				<Ionicons name='md-person' size={50} color='black' />
+				<Text style={styles.title}> {this.state.email} </Text>
+				<TouchableOpacity style={styles.button} onPress={this.onLogoutHandler}>
+					<Text style={styles.buttonTitle}>Log out</Text>
 				</TouchableOpacity>
 			</View>
 		);
@@ -37,4 +39,20 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		backgroundColor: 'white',
 	},
+	title: {
+		fontSize: 20,
+		fontWeight: '800',
+		marginVertical: 20,
+	},
+	button: {
+		backgroundColor: 'blue',
+		width: '80%',
+		padding: 10,
+		alignItems: 'center',
+		borderRadius: 10,
+	},
+	buttonTitle: {
+		fontSize: 18,
+		color: 'white'
+	}
 });

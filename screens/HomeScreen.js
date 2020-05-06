@@ -1,18 +1,46 @@
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity, FlatList, Modal } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
+import * as firebase from 'firebase';
+import 'firebase/firestore';
+
 import ListItem from '../data/tempData';
 import ListItems from '../components/ListItems';
 import AddList from '../components/AddList';
-import * as firebase from 'firebase';
 
 export default class HomeScreen extends Component {
 	state = {
-		isVisible: false
+		isVisible: false,
+		data: [],
 	}
 
 	onOpenModel() {
 		this.setState({isVisible: !this.state.isVisible})
+	}
+
+	renderList = list => {
+		return <ListItems list={list} />
+	}
+
+  componentDidMount() {
+		firebase
+			.firestore()
+			.collection('Shoes')
+			.onSnapshot((snapShot) => {
+				const list = [];
+				snapShot.forEach((doc) => {
+					list.push({
+						name: doc.data().name,
+						price: doc.data().price,
+						image: doc.data().image,
+					});
+				});
+				this.setState({ 
+					data: list.sort((a, b) => {
+						return (a.name > b.name)
+					})
+				 });
+			});
 	}
 	
 	render() {
@@ -41,11 +69,11 @@ export default class HomeScreen extends Component {
 
 				<View style={{ height: 300, paddingLeft: 32 }}>
 					<FlatList
-						data={ListItem}
+						data={this.state.data}
 						horizontal={true}
 						showsHorizontalScrollIndicator={true}
 						keyExtractor={(item) => item.name}
-						renderItem={({ item }) => <ListItems list={item} />}
+						renderItem={({ item }) => this.renderList(item)}
 					/>
 				</View>
 			</View>

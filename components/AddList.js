@@ -1,25 +1,60 @@
 import React, { Component } from 'react'
-import { Text, StyleSheet, View, KeyboardAvoidingView, TouchableOpacity } from 'react-native'
-import {AntDesign} from '@expo/vector-icons'
-import { TextInput } from 'react-native-gesture-handler'
+import { Text, StyleSheet, View, KeyboardAvoidingView, TextInput, TouchableOpacity } from 'react-native'
+import { AntDesign } from '@expo/vector-icons'
+import * as firebase from 'firebase';
+import 'firebase/firestore';
 
-const AddList = (props) => {
-  return (
-		<KeyboardAvoidingView style={styles.container} behavior={'padding'}>
-			<TouchableOpacity style={styles.close} onPress={props.closeModal}>
-				<AntDesign name="close" size={24} color="gray" />
-      </TouchableOpacity>
+import ListItems from '../data/tempData';
+import { addList } from '../api/FirebaseStore';
+
+export default class AddList extends Component {
+  state = { 
+    name: '',
+    price: ''
+  }
+
+  onAddItemHandler = () => {
+    const { name, price } = this.state;
+
+    // ListItems.push({ name, price });
+    const ref = firebase
+      .firestore()
+      .collection('Shoes')
+		  .add({ name, price })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((err) => console.error(err));
+
+    this.props.closeModal();
+  }
+  
+  render() {
+    return (
+      <KeyboardAvoidingView style={styles.container} behavior={'padding'}>
+        <TouchableOpacity style={styles.close} onPress={this.props.closeModal}>
+          <AntDesign name="close" size={24} color="gray" />
+        </TouchableOpacity>
       
-      <Text style={styles.title}>Create Shoes</Text>
+        <Text style={styles.title}>Create Shoes</Text>
 
-      <TextInput style={styles.input} autoCapitalize="none" placeholder='Name?' />
-      <TextInput style={styles.input} autoCapitalize="none" placeholder='Price?' />
+        <TextInput style={styles.input} autoCapitalize="none"
+          placeholder='Name?'
+          onChangeText={(name) => this.setState({name})}
+          value={this.state.name}
+        />
+        <TextInput style={styles.input} autoCapitalize="none"
+          placeholder='Price?'
+          onChangeText={(price) => this.setState({price})}
+          value={this.state.price}
+        />
 
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonTitle}>Create</Text>
-      </TouchableOpacity>
-		</KeyboardAvoidingView>
-  );
+        <TouchableOpacity style={styles.button} onPress={this.onAddItemHandler}>
+          <Text style={styles.buttonTitle}>Create</Text>
+        </TouchableOpacity>
+      </KeyboardAvoidingView>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
@@ -60,5 +95,3 @@ const styles = StyleSheet.create({
     color: 'white',
   }
 })
-
-export default AddList;
