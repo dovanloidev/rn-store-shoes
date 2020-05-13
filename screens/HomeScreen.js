@@ -12,6 +12,7 @@ export default class HomeScreen extends Component {
 	state = {
 		isVisible: false,
 		data: [],
+		imageUrl : []
 	}
 
 	onOpenModel() {
@@ -19,7 +20,7 @@ export default class HomeScreen extends Component {
 	}
 
 	renderList = list => {
-		return <ListItems list={list} />
+		return <ListItems list={list} image={list.image} />
 	}
 
   componentDidMount() {
@@ -30,16 +31,24 @@ export default class HomeScreen extends Component {
 				const list = [];
 				snapShot.forEach((doc) => {
 					list.push({
+						id: doc.id,
 						name: doc.data().name,
 						price: doc.data().price,
 						image: doc.data().image,
 					});
 				});
+
 				this.setState({ 
 					data: list.sort((a, b) => {
 						return (a.name > b.name)
 					})
-				 });
+				});
+
+				const imageUrl = []
+				list.forEach((item) => {
+					imageUrl.push(item.image)
+				})
+				this.setState({ imageUrl })
 			});
 	}
 	

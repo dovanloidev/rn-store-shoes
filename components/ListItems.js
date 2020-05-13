@@ -1,33 +1,49 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Modal, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Modal, Image, Alert } from 'react-native';
 import TodoModal from './TodoModal';
-import { AntDesign } from '@expo/vector-icons';
-
+import { AntDesign, MaterialIcons } from '@expo/vector-icons';
+import * as firebase from 'firebase';
+import 'firebase/firestore';
 
 export default class ListItems extends React.Component {
 	state = {
 		showListVisible: false,
+		imageUrl: null,
 	};
 
 	onListVisible = () => {
 		this.setState({ showListVisible: !this.state.showListVisible });
 	};
 
+	onRemoveHandler = () => {
+		let id = this.props.list.id;
+		firebase.firestore().collection('Shoes').doc(id).delete();
+		Alert.alert('Remove thanh cong');
+	};
+
+	componentDidMount() {
+		// console.warn(this.props.list.id)
+	}
+
 	render() {
 		return (
 			<View style={styles.container}>
 				<Modal animationType="slide" visible={this.state.showListVisible}>
-					<TodoModal closeModal={this.onListVisible} />
+					<TodoModal
+						list={this.props.list}
+						closeModal={this.onListVisible} />
 				</Modal>
 
-				<TouchableOpacity style={styles.buttonClose}>
-					<AntDesign name="close" size={24} color="white" />
+				<TouchableOpacity style={styles.buttonClose} onPress={this.onRemoveHandler}>
+					<AntDesign name="close" size={24} color="black" />
 				</TouchableOpacity>
 
 				<TouchableOpacity style={styles.button} onPress={this.onListVisible}>
 					<Image
-						source={{uri: this.props.list.image}}
-						style={{ width: 100, height: 100 }}
+						// source={{ uri: this.props.image }}
+						source={{ uri: 'https://facebook.github.io/react/logo-og.png' }}
+						resizeMode="cover"
+						style={{ width: 100, height: 100, borderRadius: 10 }}
 					/>
 					<Text style={styles.title}>{this.props.list.name}</Text>
 				</TouchableOpacity>
@@ -35,7 +51,6 @@ export default class ListItems extends React.Component {
 		);
 	}
 }
-
 
 const styles = StyleSheet.create({
 	container: {
@@ -54,13 +69,13 @@ const styles = StyleSheet.create({
 	},
 	button: {
 		flex: 1,
-		alignItems: 'center'
+		alignItems: 'center',
 	},
 	title: {
 		color: 'black',
 		fontSize: 18,
 		fontWeight: '700',
 		flex: 1,
-		marginTop: 10
+		marginTop: 10,
 	},
 });

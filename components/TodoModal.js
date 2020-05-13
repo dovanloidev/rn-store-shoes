@@ -1,8 +1,32 @@
 import React, { Component } from 'react'
-import { Text, StyleSheet, View, SafeAreaView, TouchableOpacity, TextInput } from 'react-native'
+import { Text, StyleSheet, View, SafeAreaView, TouchableOpacity, TextInput, Alert } from 'react-native'
 import { AntDesign } from '@expo/vector-icons';
+import * as firebase from 'firebase';
+import 'firebase/firestore'
 
 export default class TodoModal extends Component {
+  state = {
+    name: '',
+    price: null
+  }
+  
+  onUpdateHandler = () => {
+    let id = this.props.list.id
+    const { name, price } = this.state
+    firebase.firestore().collection('Shoes').doc(id).update({
+      name,
+      price
+    })
+    Alert.alert('Update thanh cong')
+  }
+
+  componentDidMount() {
+    this.setState({
+      name: this.props.list.name,
+      price: this.props.list.price
+    })
+  }
+  
   render() {
     return (
       <SafeAreaView style={styles.container}>
@@ -15,13 +39,17 @@ export default class TodoModal extends Component {
         <TextInput
           style={styles.input}
           placeholder='Name?'
+          value={this.state.name}
+          onChangeText={(name) => this.setState({name})}
         />
         <TextInput
           style={styles.input}
           placeholder='Name?'
+          value={this.state.price}
+          onChangeText={(price) => this.setState({price})}
         />
 
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={this.onUpdateHandler}>
           <Text style={styles.buttonTitle}>Update</Text>
         </TouchableOpacity>
       </SafeAreaView>
